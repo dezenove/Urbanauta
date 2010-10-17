@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+    {% for pothole in potholes %}<Placemark>
+        <name>Buraco</name>
+        <description>
+            <![CDATA[
+                {{ pothole.desc }}
+            ]]>
+        </description>
+        {{ pothole.kml|safe }}
+    </Placemark>{% endfor %}
+    </Document>
+</kml>

@@ -1,0 +1,120 @@
+body
+{
+    height: 100%; 
+    margin: 0px; 
+    padding: 0px;
+}
+
+.quebra
+{
+	clear: both;
+}
+
+#tudo
+{
+    width: 100%;
+    height: 100%;
+}
+
+#busca
+{
+	width: 100%;
+	height: 117px;
+	padding-top: 23px;
+}
+
+.submitLink
+{
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	cursor: hand;
+}
+
+#busca_interno
+{
+	margin-left: 660px;
+}
+
+#txt_busca
+{
+	height: 18px;
+	width: 295px;
+	float: left;
+	padding-top: 4px;
+}
+
+#txt_busca input
+{
+	margin-left: 3px;
+	height: 18px;
+	width: 295px;
+	font-family: Tahoma;
+	font-size: 11px;
+	border: none;
+	color: #555;
+}
+
+#menu
+{
+	width: 100%;
+	height: 40px;
+}
+
+#menu_interno
+{
+	margin-top: 12px;
+	margin-left: 23px;
+	font-family: tahoma;
+	font: 11px tahoma;
+	color: #FFF;
+}
+
+#menu a
+{
+	color: #FFF;
+}
+
+#menu a:hover
+{
+	color: #FFFF00;
+	text-decoration: none;
+}
+
+#topo
+{
+	background-image: url('/media/img/topo.png');
+	width: 100%;
+	height: 180px;
+	background-repeat: none;
+}
+
+#logo img
+{
+	border: none;
+}
+
+#topo h1
+{
+	margin: 0px;
+	padding: 0px;
+	color: white;
+	font-family: calibri;
+	font-size: 46px;
+}
+
+#mapa
+{
+	font-size: 45px;
+	height: 360px;
+	width: 100%;
+}
+
+#botao_busca
+{
+	display: block;
+	float: left;
+	width: 65px;
+	height: 30px;
+	margin-left: 9px;
+}
