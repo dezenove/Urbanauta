@@ -1,0 +1,4 @@
+class ResponseType:
+	NO_RESPONSE = 0
+	PERSISTED = 1
+	NOT_PERSISTED = 2
