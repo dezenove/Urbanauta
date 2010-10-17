@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script src="/media/javascript/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+        var map = null;
+        var kmlLayer = null;
+    
+        function initialize() {
+            // Posição Inicial
+            var latlng = new google.maps.LatLng(-8.05427, -34.88125);
+
+            // Configuração do Mapa
+            var myOptions = {
+                zoom: 8,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            // Criando o Mapa
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            
+            loadJson();
+        }
+        
+        function loadKml() {
+            var kmlUrl = window.location.href.substring(0, 1 + window.location.href.lastIndexOf('/')) + 'kml';     
+            kmlLayer = new google.maps.KmlLayer(kmlUrl);
+            alert(kmlLayer);
+            kmlLayer.setMap(map);
+        }
+        
+        function loadJson() {
+            var jsonUrl = window.location.href.substring(0, 1 + window.location.href.lastIndexOf('/')) + 'geojson';
+            alert(jsonUrl);
+            $.getJSON(jsonUrl, function(json){
+                alert("JSON Data: " + json[0].description);
+            });
+        }
+        
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>

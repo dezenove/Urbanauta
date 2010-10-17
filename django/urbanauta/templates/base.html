@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>Urbanauta</title>
+    <!-- meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css">
+    <!-- js -->
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="/media/javascript/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+        var geocoder;
+        var map;
+        var defaultMessage = "digite aqui...";
+        var markers = new Array();
+            
+        function initialize() {
+            geocoder = new google.maps.Geocoder();
+            var recife = new google.maps.LatLng(-8.0542775, -34.8812561);
+            var myOptions = {
+              zoom: 15,
+              center: recife,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            
+            var txtBusca = document.getElementById("txtBuscar");
+            txtBusca.value = defaultMessage;
+            
+            loadJson();
+        }
+
+        function search() {
+            var address = document.getElementById("txtBuscar").value;
+            geocoder.geocode({'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+
+                    var buraco = CriarBuraco('titulo', 'numVezes', 'dataInserido', 'dataModificado');
+                    InserirMarcador(results[0].geometry.location, buraco);                
+                } else {
+                    alert("A busca não obteve resultado.\nTente novamente com outra descrição.");
+                }
+            });
+        }
+
+        function searchFocus() {
+            var txtBusca = document.getElementById("txtBuscar");
+
+            if (txtBusca.value == defaultMessage) {
+                txtBusca.value = "";
+            }
+        }
+
+        function searchFocusOut() {
+            var txtBusca = document.getElementById("txtBuscar");
+            
+            if (txtBusca.value == "") {
+                txtBusca.value = defaultMessage;
+            }
+        }    
+        
+        function searchKeyDown(event) {
+            var tecla = event.which;
+            
+            if (tecla == undefined) {
+                tecla = event.keyCode;
+            }
+            
+            if (tecla == 13) {
+                search();
+            }
+        }
+        
+        function addPothole(pothole) {
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(pothole.point.coordinates[1], pothole.point.coordinates[0]), 
+                map: map,
+                icon: '{{ MEDIA_URL }}img/icon-pothole.png',
+                title: pothole.name
+            });
+            
+            google.maps.event.addListener(marker, 'click', function() {
+                var infowindow = new google.maps.InfoWindow({
+                    content: '<div style="font-family: Tahoma; font-size: 12px;">' + pothole.description + '</div>'
+                });
+
+                infowindow.open(map,marker);
+            });
+            
+            markers[markers.length] = marker;
+        }
+
+        function clearMap() {
+            for (var i = 0; i < markers.length; i++){
+                markers[i].setMap(null);
+            }
+            
+            markers = new Array();
+        }
+        
+        function loadJson() {
+            $.getJSON('{% url pothole.views.geojson %}', function (result) {
+                for (var i=0; i < result.length; i++) {
+                    addPothole(result[i]);
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="initialize()">
+    <div id="tudo">
+        <div id="topo">
+            <div id="busca">
+                <div id="busca_interno">
+                    <div id="txt_busca">
+                        <input id="txtBuscar" type="textbox" onfocus="searchFocus()" onblur="FocusOutTxtBuscar()" onkeydown="searchKeyDown(event)" />
+                    </div>
+                    
+                    <a href="#" id="botao_busca" onclick="search()" value=""></a>
+                    <div class="quebra"></div>
+                </div>
+            </div>
+            
+            <div id="menu">
+                <div id="menu_interno">
+                    <a href="#">Ajuda</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">Sobre</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">Empresa</a>
+                </div>
+            </div>
+        </div>    
+        {% block content %}
+        <div id="map_canvas" style="height:70%"></div>
+        {% endblock %}
+    </div>
+</body>
+</html>
